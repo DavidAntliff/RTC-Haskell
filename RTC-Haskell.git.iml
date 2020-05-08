@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="HASKELL_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$USER_HOME$/git/github/DavidAntliff/RTC-Haskell.git">
+      <sourceFolder url="file://$USER_HOME$/git/github/DavidAntliff/RTC-Haskell.git/src" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/git/github/DavidAntliff/RTC-Haskell.git/app" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/git/github/DavidAntliff/RTC-Haskell.git/test" isTestSource="true" />
+      <excludeFolder url="file://$USER_HOME$/git/github/DavidAntliff/RTC-Haskell.git/.stack-work" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="base-4.13.0.0" level="project" />
+    <orderEntry type="library" name="ghc-prim-0.5.3" level="project" />
+    <orderEntry type="library" name="integer-gmp-1.0.2.0" level="project" />
+  </component>
+</module>

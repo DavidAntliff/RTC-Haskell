@@ -1,0 +1,5 @@
+.stack-work/
+*~
+
+# IntelliJ-Haskell
+out/
