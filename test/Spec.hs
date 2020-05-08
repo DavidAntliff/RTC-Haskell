@@ -1,2 +1,9 @@
-main :: IO ()
-main = putStrLn "Test suite not yet implemented"
+import Test.Tasty
+import qualified TestFoo (unitTests)
+import qualified TestLib (unitTests)
+
+main :: IO()
+main = defaultMain tests
+
+tests :: TestTree
+tests = testGroup "All Tests" [TestFoo.unitTests, TestLib.unitTests]
