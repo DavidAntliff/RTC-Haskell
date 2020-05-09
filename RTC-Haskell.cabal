@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 58375b4bfda89f70d70eed07ffb603356cc80e9eb63549163a1e83e9aae3cdf2
+-- hash: 192728af71c5bb3ddd3c4a574fe59f4d4954bc70f342aaac0e328fb65b940173
 
 name:           RTC-Haskell
 version:        0.1.0.0
@@ -27,8 +27,9 @@ source-repository head
 
 library
   exposed-modules:
-      Foo
       Lib
+      Math
+      Quadruple
   other-modules:
       Paths_RTC_Haskell
   hs-source-dirs:
@@ -53,8 +54,9 @@ test-suite RTC-Haskell-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      TestFoo
-      TestLib
+      Lib.Tests
+      Math.Tests
+      Quadruple.Tests
       Paths_RTC_Haskell
   hs-source-dirs:
       test
