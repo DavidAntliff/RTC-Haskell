@@ -35,6 +35,15 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - RTC-Haskell
+  RTC-Chapter1-exe:
+    main:         Main.hs
+    source-dirs:  app/chapter1
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - RTC-Haskell
 
 tests:
   RTC-Haskell-test:
