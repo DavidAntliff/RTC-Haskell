@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c8191a80a74c44d0dd9657d1ade8b47bd4717e0d8786bd1551db2db6f9461ee5
+-- hash: 9e79ce3b379a6c2684882a07212d87ce3218abac5fe1b6d94781ae902e37fa89
 
 name:           RTC-Haskell
 version:        0.1.0.0
@@ -46,6 +46,18 @@ executable RTC-Chapter1-exe
       Paths_RTC_Haskell
   hs-source-dirs:
       app/chapter1
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      RTC-Haskell
+    , base >=4.7 && <5
+  default-language: Haskell2010
+
+executable RTC-Chapter2-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_RTC_Haskell
+  hs-source-dirs:
+      app/chapter2
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       RTC-Haskell

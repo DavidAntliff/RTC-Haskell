@@ -16,7 +16,7 @@ module Quadruple ( Quadruple(..)
                  , cross
                  ) where
 
-data Quadruple = Quadruple { x, y, z, w :: Double } deriving (Eq, Show)
+data Quadruple = Quadruple { x, y, z, w :: Double } deriving (Eq, Show, Read)
 
 isPoint :: Quadruple -> Bool
 isPoint q = w q == 1.0

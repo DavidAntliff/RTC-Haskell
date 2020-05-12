@@ -3,3 +3,6 @@
 
 # IntelliJ-Haskell
 out/
+
+# Application
+output.ppm

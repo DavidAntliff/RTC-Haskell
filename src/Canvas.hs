@@ -5,6 +5,7 @@ module Canvas ( Color(..)
               , (|*)
               , (*|)
               , (|*|)
+              , Canvas
               , canvas
               , width
               , height
@@ -12,13 +13,16 @@ module Canvas ( Color(..)
               , writePixelAt
               , setAllPixelsTo
               , ppmFromCanvas
-              -- TODO: REMOVE
+              -- For testing only:
               , getRow
               , ppmFromFloat
               , ppmFromColor
+              , splitLineBy
+              , splitLinesBy
               ) where
 
 import Data.Array
+import Data.List (elemIndex)
 
 data Color = Color { red, green, blue :: Float } deriving (Eq, Show)
 
@@ -64,15 +68,17 @@ writePixelAt (x, y) v (Canvas w h p) = Canvas w h $ p // [((x, y), v)]
 
 setAllPixelsTo :: Color -> Canvas -> Canvas
 setAllPixelsTo color (Canvas w h _) = Canvas w h $ array ((0, 0), (w - 1, h -1)) [ ((i, j), color) | i <- [0..w-1], j <- [0..h-1]]
-      
+
 ppmFromCanvas :: Canvas -> String
 ppmFromCanvas c =
   let w = show $ width c
       h = show $ height c
       depth = 255
       pixels' = pixels c
-      pixelLines = [getRow ri depth pixels' | ri <- [0..(height c)-1]]
-  in unlines $ ["P3", w ++ " " ++ h, show depth] ++ pixelLines
+      headerLines = ["P3", w ++ " " ++ h, show depth]
+      rowLines = [getRow ri depth pixels' | ri <- [0..(height c)-1]]
+      splitLines = splitLinesBy 70 rowLines
+  in unlines $ headerLines ++ splitLines
 
 getRow :: Int -> Int -> Array (Int, Int) Color -> String
 getRow ri depth a = unwords $ [ppmFromColor depth (a ! (ci, ri)) | ci <- [0 .. (fst $ snd $ bounds a)]]
@@ -82,9 +88,24 @@ ppmFromFloat :: Int -> Float -> Int
 ppmFromFloat depth = round . (fromIntegral depth *) . max 0.0 . min 1.0
 
 ppmFromColor :: Int -> Color -> String
-ppmFromColor depth (Color r g b) = 
+ppmFromColor depth (Color r g b) =
   let r' = ppmFromFloat depth r
       g' = ppmFromFloat depth g
       b' = ppmFromFloat depth b
   in unwords $ map show [r', g', b']
 
+-- Split lines exceeding limit by inserting newline at position of a space
+splitLinesBy :: Int -> [String] -> [String]
+splitLinesBy limit = concatMap (splitLineBy limit)
+
+-- find the first space at or to the left of the limit
+splitLineBy :: Int -> String -> [String]
+splitLineBy limit line
+    | length line < limit = [line]
+    | otherwise =
+        let (a, _) = splitAt (limit + 1) line
+            a' = reverse a
+            idx = case elemIndex ' ' a' of
+                Nothing -> 0
+                Just val -> limit - val
+        in take idx line : splitLineBy limit (drop (idx + 1) line) 
