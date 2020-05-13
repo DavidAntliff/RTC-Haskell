@@ -54,6 +54,8 @@ To read a file into a List of values, for example `Int`s:
 
 ## Extensions
 
+https://typeclasses.com/ghc/extensions
+
 Enabled with, for example:
 
 ```haskell
@@ -89,6 +91,68 @@ f 3  -- returns (1, 2, 3, 4)
 
 It is equivalent to `\x -> (1, 2, x, 4)`.
 
+### OverloadedStrings
+
+Allows string literals to be polymorphic over the `IsString` type class, allowing:
+
+```haskell
+import Data.Text
+
+a :: String
+a = "hello"
+
+b :: Text
+b = "hello"
+```
+
+### BlockArguments
+
+Permits reduced use of parentheses especially with `do` blocks:
+
+```haskell
+main :: IO()
+main = forever $ do
+    word <- fmap fixString getLine
+    isPalindrome word
+```
+
+Can be:
+
+```haskell
+{-# LANGUAGE BlockArguments #-}
+
+main :: IO()
+main = forever do
+    word <- fmap fixString getLine
+    isPalindrome word
+```
+
+It also permits multiple block arguments:
+
+```haskell
+{-# LANGUAGE BlockArguments #-}
+
+import Control.Concurrent.Async (concurrently_)
+
+blockStack =
+  concurrently_
+  do
+    putStrLn ['a'..'z']
+  do
+    putStrLn ['A'..'Z']
+```
+
+### TypeApplications
+
+Allows instantiation of one or more polymorphic function's type arguments to a specific type. Useful in the REPL:
+
+```haskell
+λ> :type (>>=) 
+(>>=) :: Monad m => m a -> (a -> m b) -> m b
+
+λ> :type (>>=) @Maybe
+(>>=) @Maybe :: Maybe a -> (a -> Maybe b) -> Maybe b
+```
 
 ## Language
 
@@ -176,3 +240,9 @@ THe following series of articles provides good coverage:
  
 In addition, the last chapter (42, "Efficient, Stateful Arrays in Haskell") of "Get Programming with Haskell" by Will
 Kurt has excellent information for using arrays like `STUArray` in high performance operations.
+
+
+## Other Resources
+
+ * [Thoughts on Haskell 2020](https://alpacaaa.net/thoughts-on-haskell-2020/)
+

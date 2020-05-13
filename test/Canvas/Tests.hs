@@ -4,39 +4,14 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 import Canvas
+import Color
 import Math (almostEqual)
+import Color.Tests (colorAlmostEqual)
 
 unitTests :: TestTree
 
-colorAlmostEqual :: Color -> Color -> Bool
-colorAlmostEqual c1 c2 = and $ zipWith almostEqual (toList c1) (toList c2)  
-
-unitTests = testGroup "features/tuples.feature Chapter 2"
-  [ testGroup "Colors are (red, green, blue) tuples" $
-      let c = Color (-0.5) 0.4 1.7 in
-        [ testCase "red" $ assertEqual [] (red c) (-0.5)
-        , testCase "green" $ assertEqual [] (green c) 0.4
-        , testCase "blue" $ assertEqual [] (blue c) 1.7
-        ]
-  , testCase "Adding colors" $
-      let c1 = Color 0.9 0.6 0.75
-          c2 = Color 0.7 0.1 0.25
-      in assertBool [] $ colorAlmostEqual (c1 |+| c2) (Color 1.6 0.7 1.0)
-  , testCase "Subtracting colors" $
-      let c1 = Color 0.9 0.6 0.75
-          c2 = Color 0.7 0.1 0.25
-      in assertBool [] $ colorAlmostEqual (c1 |-| c2) (Color 0.2 0.5 0.5)
-  , testGroup "Multiplying a color" $
-      let c = Color 0.2 0.3 0.4
-      in [ testCase "by a scalar" $ assertBool [] $ colorAlmostEqual (c |* 2) (Color 0.4 0.6 0.8)
-         , testCase "by a scalar prefix" $ assertBool [] $ colorAlmostEqual (2 *| c) (Color 0.4 0.6 0.8)
-         ]  
-  , testCase "Multiplying colors" $
-      let c1 = Color 1 0.2 0.4
-          c2 = Color 0.9 1 0.1
-      in assertBool [] $ colorAlmostEqual (c1 |*| c2) (Color 0.9 0.2 0.04)
-
-  , testGroup "Creating a canvas" $
+unitTests = testGroup "Canvas Unit Tests"
+  [ testGroup "Creating a canvas" $
       let c = canvas 10 20
       in [ testCase "width" $ assertEqual [] (width c) 10
          , testCase "height" $ assertEqual [] (height c) 20
@@ -73,26 +48,7 @@ unitTests = testGroup "features/tuples.feature Chapter 2"
       let c1 = Color 1 0.8 0.6
           c = setAllPixelsTo c1 $ canvas 10 2
           ppm = ppmFromCanvas c
-      in assertBool [] $ all ((<= 70) . length) (lines ppm)
-
-  , testGroup "SplitLineBy"
-      [ testCase "" $ assertEqual [] ["123 456"] (splitLineBy 8 "123 456")
-      , testCase "" $ assertEqual [] ["123 456", "789 1011", "12"] (splitLineBy 8 "123 456 789 1011 12")
-      , testCase "" $ assertEqual [] ["1 2", "3 4", "5 6", "7 8", "9 0"] (splitLineBy 4 "1 2 3 4 5 6 7 8 9 0")
-      ]
-  , testCase "SplitLinesBy" $ assertEqual [] [ "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
-                                             , "153 255 204 153 255 204 153 255 204 153 255 204 153"
-                                             , "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
-                                             , "153 255 204 153 255 204 153 255 204 153 255 204 153"
-                                             ]
-                                             (splitLinesBy 70 [ "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153"
-                                                              , "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 153"
-                                                              ])
-                                                              
-  , testCase "PPM files are terminated by a newline character" $
-      let c = canvas 5 3
-          ppm = ppmFromCanvas c
-      in assertBool [] $ last ppm == '\n'                                                            
+      in assertBool [] $ all ((<= 70) . length) (lines ppm)                                                         
   ]
 
 

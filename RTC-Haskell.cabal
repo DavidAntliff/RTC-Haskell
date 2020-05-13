@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9e79ce3b379a6c2684882a07212d87ce3218abac5fe1b6d94781ae902e37fa89
+-- hash: 6da31cd7b6419eb2b9d1e7130a069d53af1b3748e2954b66003d1a7e32f8eb76
 
 name:           RTC-Haskell
 version:        0.1.0.0
@@ -28,6 +28,8 @@ source-repository head
 library
   exposed-modules:
       Canvas
+      Color
+      Internal.Canvas
       Lib
       Math
       Quadruple
@@ -81,6 +83,8 @@ test-suite RTC-Haskell-test
   main-is: Spec.hs
   other-modules:
       Canvas.Tests
+      Color.Tests
+      Internal.Canvas.Tests
       Lib.Tests
       Math.Tests
       Quadruple.Tests

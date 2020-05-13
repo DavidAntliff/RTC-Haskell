@@ -8,7 +8,7 @@ import Math (almostEqual)
 
 unitTests :: TestTree
 
-unitTests = testGroup "features/tuples.feature Chapter 1"
+unitTests = testGroup "Math Unit Tests"
   [ testGroup "A tuple with w=1.0 is a point" $
       let q = Quadruple 4.3 (-4.2) 3.1 1.0 in
         [ testCase "x" $ assertEqual [] (x q) 4.3
