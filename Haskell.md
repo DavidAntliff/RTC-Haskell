@@ -242,6 +242,32 @@ In addition, the last chapter (42, "Efficient, Stateful Arrays in Haskell") of "
 Kurt has excellent information for using arrays like `STUArray` in high performance operations.
 
 
+## Benchmarks
+
+Use the [`criterion`]() library for benchmarking.
+
+Stack supports benchmarking too. In `package.yaml`:
+
+```yaml
+benchmarks:
+  criterion-benchmarks:
+    dependencies:
+      - criterion
+    ghc-options:
+      - -O2
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    main: Main.hs
+    source-dirs: benchmark
+```
+
+Invoke with `stack bench --ba "--output bench.html"`.
+
+The generated file `bench.html` contains useful graphs.
+
+See this [tutorial](http://www.serpentine.com/criterion/tutorial.html).
+
 ## Other Resources
 
  * [Thoughts on Haskell 2020](https://alpacaaa.net/thoughts-on-haskell-2020/)

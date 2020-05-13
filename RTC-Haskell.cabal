@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6da31cd7b6419eb2b9d1e7130a069d53af1b3748e2954b66003d1a7e32f8eb76
+-- hash: 848e8ca4acb9e1e7643873dda3bd85d01ee8d5cd07aab7ecf000a28f24fbc86c
 
 name:           RTC-Haskell
 version:        0.1.0.0
@@ -97,4 +97,19 @@ test-suite RTC-Haskell-test
     , base >=4.7 && <5
     , tasty
     , tasty-hunit
+  default-language: Haskell2010
+
+benchmark criterion-benchmarks
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Paths_RTC_Haskell
+  hs-source-dirs:
+      benchmark
+  ghc-options: -O2 -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , criterion
+    , hmatrix
+    , linear
   default-language: Haskell2010
