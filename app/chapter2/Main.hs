@@ -5,7 +5,8 @@ module Main where
 import Data.List (foldl')
 
 import Quadruple
-import qualified Canvas
+import Canvas
+import Color (Color(..))
 
 -- A projectile has a position (point) and a velocity (vector)
 -- An environment has gravity (vector) and wind (vector)
@@ -47,5 +48,5 @@ main = do
 drawTrajectory :: Canvas.Canvas -> [Quadruple] -> Canvas.Canvas
 drawTrajectory c r = 
   let coords = [ (round $ x q, Canvas.height c - round (y q)) | q <- r ]
-      c' = foldl' (\c p -> Canvas.writePixelAt p (Canvas.Color 1 0 0) c) c coords
+      c' = foldl' (\ca p -> Canvas.writePixelAt p (Color 1 0 0) ca) c coords
   in c'
