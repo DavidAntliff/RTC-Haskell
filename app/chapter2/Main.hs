@@ -33,6 +33,7 @@ main = do
   -- projectile starts one unit above the origin.
   -- velocity is normalized to 1 unit/tick.
   let projectile = Projectile (point 0 1 0) (normalize (vector 1 1.8 0) |* 11.25)
+  --let projectile = Projectile (point 0 1 0) (normalize (vector 1 1.0 0) |* 11.25)
   let result = update environment projectile []
   
   let c = Canvas.canvas 900 550
@@ -40,7 +41,7 @@ main = do
   let ppm = Canvas.ppmFromCanvas c'
   
   writeFile "output.ppm" ppm
-  print ppm
+  --print ppm
  
   mapM_ print result
   print $ length result
@@ -48,5 +49,10 @@ main = do
 drawTrajectory :: Canvas.Canvas -> [Quadruple] -> Canvas.Canvas
 drawTrajectory c r = 
   let coords = [ (round $ x q, Canvas.height c - round (y q)) | q <- r ]
-      c' = foldl' (\ca p -> Canvas.writePixelAt p (Color 1 0 0) ca) c coords
+      c' = foldl' (\ca p -> writePixelAtBoundsCheck p (Color 1 0 0) ca) c coords
   in c'
+  
+writePixelAtBoundsCheck :: (Int, Int) -> Color -> Canvas -> Canvas
+writePixelAtBoundsCheck (x, y) v c
+    | (x >= 0) && (x < width c) && (y >= 0) && (y < height c) = writePixelAt (x, y) v c
+    | otherwise = c  -- drop the bad coordinate
