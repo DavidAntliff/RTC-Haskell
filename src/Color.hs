@@ -7,7 +7,12 @@ module Color ( Color(..)
               , (|*|)
               ) where
 
+import qualified Math (almostEqual, AlmostEqual)
+
 data Color = Color { red, green, blue :: Float } deriving (Eq, Show)
+
+instance Math.AlmostEqual Color where
+  almostEqual c1 c2 = and $ zipWith Math.almostEqual (toList c1) (toList c2)  
 
 toList :: Color -> [Float]
 toList (Color r g b) = [r, g, b]

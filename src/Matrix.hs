@@ -1,12 +1,16 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FunctionalDependencies #-}
 
-module Matrix ( matrix22
+module Matrix ( Matrix22
+              , Matrix33
+              , Matrix44
+              , matrix22
               , matrix33
               , matrix44
               , elementAt
-              , almostEqual
               , (|*|)
+              , identity
+              , transpose
               ) where
 
 import Control.Lens
@@ -14,9 +18,13 @@ import Linear ( M22, M33, M44
               , V2 (V2), V3 (V3), V4 (V4)
               , R2, R3, R4
               , _x, _y, _z, _w)
-import Linear.Matrix ((!*!))
-import qualified Math (almostEqual)
+import qualified Linear.Matrix ( (!*!)
+                               , (!*)
+                               , identity
+                               , transpose)
+import qualified Math (almostEqual, AlmostEqual)
 import Data.Foldable (toList)
+import Quadruple (Quadruple(..))
 
 type Row2 = (Double, Double)
 type Row3 = (Double, Double, Double)
@@ -53,23 +61,28 @@ instance MatrixAccess Matrix33 where
 instance MatrixAccess Matrix44 where
   elementAt (row, col) (Matrix44 m) = getVectorElement4 col $ getVectorElement4 row m
 
+instance Eq Matrix22 where
+  (Matrix22 a) == (Matrix22 b) = a == b
 
-class AlmostEqual a where
-  almostEqual :: a -> a -> Bool
+instance Eq Matrix33 where
+  (Matrix33 a) == (Matrix33 b) = a == b
 
-instance AlmostEqual Matrix22 where
+instance Eq Matrix44 where
+  (Matrix44 a) == (Matrix44 b) = a == b
+
+instance Math.AlmostEqual Matrix22 where
   almostEqual (Matrix22 a) (Matrix22 b) =
     let al = concatMap toList (toList a)
         bl = concatMap toList (toList b)
     in and $ zipWith Math.almostEqual al bl
 
-instance AlmostEqual Matrix33 where
+instance Math.AlmostEqual Matrix33 where
   almostEqual (Matrix33 a) (Matrix33 b) =
     let al = concatMap toList (toList a)
         bl = concatMap toList (toList b)
     in and $ zipWith Math.almostEqual al bl
 
-instance AlmostEqual Matrix44 where
+instance Math.AlmostEqual Matrix44 where
   almostEqual (Matrix44 a) (Matrix44 b) =
     let al = concatMap toList (toList a)
         bl = concatMap toList (toList b)
@@ -81,13 +94,42 @@ class MatrixMultiplication a b c | a b -> c where
   (|*|) :: a -> b -> c
 
 instance MatrixMultiplication Matrix22 Matrix22 Matrix22 where
-  (|*|) (Matrix22 a) (Matrix22 b) = Matrix22 (a !*! b)
+  (|*|) (Matrix22 a) (Matrix22 b) = Matrix22 (a Linear.Matrix.!*! b)
 
 instance MatrixMultiplication Matrix33 Matrix33 Matrix33 where
-  (|*|) (Matrix33 a) (Matrix33 b) = Matrix33 (a !*! b)
+  (|*|) (Matrix33 a) (Matrix33 b) = Matrix33 (a Linear.Matrix.!*! b)
 
 instance MatrixMultiplication Matrix44 Matrix44 Matrix44 where
-  (|*|) (Matrix44 a) (Matrix44 b) = Matrix44 (a !*! b)
+  (|*|) (Matrix44 a) (Matrix44 b) = Matrix44 (a Linear.Matrix.!*! b)
+
+instance MatrixMultiplication Matrix44 Quadruple Quadruple where
+  (|*|) (Matrix44 a) (Quadruple q0 q1 q2 a3) =
+    let (V4 x y z w) = a  Linear.Matrix.!* V4 q0 q1 q2 a3
+    in Quadruple x y z w
+
+class SquareMatrix a where
+  identity :: a
+
+instance SquareMatrix Matrix22 where
+  identity = Matrix22 ( Linear.Matrix.identity :: M22 Double)
+
+instance SquareMatrix Matrix33 where
+  identity = Matrix33 ( Linear.Matrix.identity :: M33 Double)
+
+instance SquareMatrix Matrix44 where
+  identity = Matrix44 ( Linear.Matrix.identity :: M44 Double)
+
+class Transposable a where
+  transpose :: a -> a
+
+instance Transposable Matrix22 where
+  transpose (Matrix22 m) = Matrix22 (Linear.Matrix.transpose m)
+
+instance Transposable Matrix33 where
+  transpose (Matrix33 m) = Matrix33 (Linear.Matrix.transpose m)
+
+instance Transposable Matrix44 where
+  transpose (Matrix44 m) = Matrix44 (Linear.Matrix.transpose m)
 
 -- Internal
 getVectorElement2 :: Int -> V2 a -> a

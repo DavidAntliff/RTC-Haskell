@@ -6,7 +6,6 @@ import Test.Tasty.HUnit
 import Canvas
 import Color
 import Math (almostEqual)
-import Color.Tests (colorAlmostEqual)
 
 unitTests :: TestTree
 
@@ -20,7 +19,7 @@ unitTests = testGroup "Canvas Unit Tests"
   , testGroup "Writing pixels to a canvas" $
       let red = Color 1 0 0
           c = writePixelAt (2, 3) red $ canvas 10 20
-      in [ testCase "red pixel at 2 3" $ assertBool [] $ colorAlmostEqual red (pixelAt (2, 3) c)
+      in [ testCase "red pixel at 2 3" $ assertBool [] $ almostEqual red (pixelAt (2, 3) c)
          , testCase "rest black" $ assertBool [] $ and $ [pixelAt (x, y) c == Color 0 0 0 | x <- [0..9], x /= 2, y <- [0..19], y /= 3]
       ]
   , testCase "Set all pixels to one color" $

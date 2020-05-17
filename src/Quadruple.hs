@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module Quadruple ( Quadruple(..)
                  , isPoint
                  , isVector
@@ -15,6 +17,8 @@ module Quadruple ( Quadruple(..)
                  , dot
                  , cross
                  ) where
+
+import qualified Math (almostEqual, AlmostEqual)
 
 data Quadruple = Quadruple { x, y, z, w :: Double } deriving (Eq, Show, Read)
 
@@ -74,4 +78,9 @@ dot q1 q2 = sum $ zipWith (*) (toList q1) (toList q2)
 cross :: Quadruple -> Quadruple -> Quadruple
 (Quadruple x1 y1 z1 _) `cross` (Quadruple x2 y2 z2 _) =
   vector (y1 * z2 - z1 * y2) (z1 * x2 - x1 * z2) (x1 * y2 - y1 * x2)
- 
+
+instance Math.AlmostEqual Quadruple where
+  almostEqual (Quadruple x0 y0 z0 w0) (Quadruple x1 y1 z1 w1) = x0 `Math.almostEqual` x1
+                                                              && y0 `Math.almostEqual` y1
+                                                              && z0 `Math.almostEqual` z1
+                                                              && w0 `Math.almostEqual` w1

@@ -1,5 +1,6 @@
 {-# LANGUAGE ViewPatterns #-}
-module Math ( almostEqual
+module Math ( AlmostEqual
+            , almostEqual
             , almostEqualTol
             ) where
 
@@ -8,8 +9,17 @@ import Data.Maybe (fromMaybe)
 epsilon :: (Fractional a) => a
 epsilon = 0.00001
 
-almostEqual :: (Ord a, Fractional a) => a -> a -> Bool
-almostEqual x y = abs (x - y) < epsilon
+class AlmostEqual a where
+  almostEqual :: a -> a -> Bool
+
+instance AlmostEqual Double where
+  almostEqual x y = abs (x - y) < epsilon
+
+instance AlmostEqual Float where
+  almostEqual x y = abs (x - y) < epsilon
+
+--almostEqual :: (Ord a, Fractional a) => a -> a -> Bool
+--almostEqual x y = abs (x - y) < epsilon
 
 almostEqualTol :: (Ord a, Fractional a) => a -> a -> a -> Bool
 almostEqualTol x y tol = abs (x - y) < tol
