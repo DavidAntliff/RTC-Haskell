@@ -4,6 +4,7 @@ module Matrix ( matrix22
               , matrix33
               , matrix44
               , elementAt
+              , almostEqual
               ) where
 
 import Control.Lens
@@ -11,6 +12,8 @@ import Linear ( M22, M33, M44
               , V2 (V2), V3 (V3), V4 (V4)
               , R2, R3, R4
               , _x, _y, _z, _w)
+import qualified Math (almostEqual)
+import Data.Foldable (toList)
 
 type Row2 = (Double, Double)
 type Row3 = (Double, Double, Double)
@@ -47,14 +50,36 @@ instance MatrixAccess Matrix33 where
 instance MatrixAccess Matrix44 where
   elementAt (row, col) (Matrix44 m) = getVectorElement4 col $ getVectorElement4 row m
 
+
+class AlmostEqual a where
+  almostEqual :: a -> a -> Bool
+
+instance AlmostEqual Matrix22 where
+  almostEqual (Matrix22 a) (Matrix22 b) =   
+    let al = concatMap toList (toList a)
+        bl = concatMap toList (toList b)
+    in and $ zipWith Math.almostEqual al bl
+
+instance AlmostEqual Matrix33 where
+  almostEqual (Matrix33 a) (Matrix33 b) =   
+    let al = concatMap toList (toList a)
+        bl = concatMap toList (toList b)
+    in and $ zipWith Math.almostEqual al bl
+
+instance AlmostEqual Matrix44 where
+  almostEqual (Matrix44 a) (Matrix44 b) =   
+    let al = concatMap toList (toList a)
+        bl = concatMap toList (toList b)
+    in and $ zipWith Math.almostEqual al bl
+
 -- Internal
-getVectorElement2 :: Int -> V2 a -> a 
+getVectorElement2 :: Int -> V2 a -> a
 getVectorElement2 idx v = v ^. ind2 idx
 
-getVectorElement3 :: Int -> V3 a -> a 
+getVectorElement3 :: Int -> V3 a -> a
 getVectorElement3 idx v = v ^. ind3 idx
 
-getVectorElement4 :: Int -> V4 a -> a 
+getVectorElement4 :: Int -> V4 a -> a
 getVectorElement4 idx v = v ^. ind4 idx
 
 -- map V2 element indices to Lens

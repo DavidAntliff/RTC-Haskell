@@ -17,16 +17,40 @@ unitTests = testGroup "Matrix Unit Tests"
          , testCase "M[3,2]" $ assertEqual [] (elementAt (3, 2) m ) 15.5
          ]
   , testGroup "Constructing and inspecting a 2x2 matrix" $
-       let m = matrix22 ((-3, 5), (1, -2))
-       in [ testCase "M[0,0]" $ assertEqual [] (elementAt (0, 0) m ) (-3)
-          , testCase "M[0,1]" $ assertEqual [] (elementAt (0, 1) m ) 5
-          , testCase "M[1,0]" $ assertEqual [] (elementAt (1, 0) m ) 1
-          , testCase "M[1,1]" $ assertEqual [] (elementAt (1, 1) m ) (-2)
-          ]
+      let m = matrix22 ((-3, 5), (1, -2))
+      in [ testCase "M[0,0]" $ assertEqual [] (elementAt (0, 0) m ) (-3)
+         , testCase "M[0,1]" $ assertEqual [] (elementAt (0, 1) m ) 5
+         , testCase "M[1,0]" $ assertEqual [] (elementAt (1, 0) m ) 1
+         , testCase "M[1,1]" $ assertEqual [] (elementAt (1, 1) m ) (-2)
+         ]
   , testGroup "Constructing and inspecting a 3x3 matrix" $
-       let m = matrix33 ((-3, 5, 0), (1, -2, -7), (0, 1, 1))
-       in [ testCase "M[0,0]" $ assertEqual [] (elementAt (0, 0) m ) (-3)
-          , testCase "M[1,1]" $ assertEqual [] (elementAt (1, 1) m ) (-2)
-          , testCase "M[2,2]" $ assertEqual [] (elementAt (2, 2) m ) 1
-          ]
+      let m = matrix33 ((-3, 5, 0), (1, -2, -7), (0, 1, 1))
+      in [ testCase "M[0,0]" $ assertEqual [] (elementAt (0, 0) m ) (-3)
+         , testCase "M[1,1]" $ assertEqual [] (elementAt (1, 1) m ) (-2)
+         , testCase "M[2,2]" $ assertEqual [] (elementAt (2, 2) m ) 1
+         ]
+  , testCase "Matrix 4x4 equality with identical matrices" $
+      let a = matrix44 ((1,2,3,4), (5,6,7,8), (9,8,7,6), (5,4,3,2))
+          b = matrix44 ((1,2,3,4), (5,6,7,8), (9,8,7,6), (5,4,3,2))
+      in assertBool [] $ almostEqual a b      
+  , testCase "Matrix 4x4 equality with different matrices" $
+      let a = matrix44 ((1,2,3,4), (5,6,7,8), (9,8,7,6), (5,4,3,2))
+          b = matrix44 ((1,2,3,4), (5,6,7,8), (9,8,7,6), (5,4,3.5,2))
+      in assertBool [] $ not $ almostEqual a b      
+  , testCase "Matrix 3x3 equality with identical matrices" $
+      let a = matrix33 ((1,2,3), (5,6,7), (8,9,0))
+          b = matrix33 ((1,2,3), (5,6,7), (8,9,0))
+      in assertBool [] $ almostEqual a b  
+  , testCase "Matrix 3x3 equality with different matrices" $
+      let a = matrix33 ((1,2,3), (5,6,7.1), (8,9,0))
+          b = matrix33 ((1,2,3), (5,6,7), (8,9,0))
+      in assertBool [] $ not $ almostEqual a b  
+  , testCase "Matrix 2x2 equality with identical matrices" $
+      let a = matrix22 ((1,2), (5,6))
+          b = matrix22 ((1,2), (5,6))
+      in assertBool [] $ almostEqual a b  
+  , testCase "Matrix 2x2 equality with different matrices" $
+      let a = matrix22 ((1,2), (5,6))
+          b = matrix22 ((1.05,2), (5,6))
+      in assertBool [] $ not $ almostEqual a b  
   ]
