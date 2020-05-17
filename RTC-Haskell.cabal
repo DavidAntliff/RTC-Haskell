@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 848e8ca4acb9e1e7643873dda3bd85d01ee8d5cd07aab7ecf000a28f24fbc86c
+-- hash: 0fc46b65f187e63edae6ffd828fb54d9bfe09dbbf99f750ee6110d6c8ff3f3d3
 
 name:           RTC-Haskell
 version:        0.1.0.0
@@ -32,6 +32,7 @@ library
       Internal.Canvas
       Lib
       Math
+      Matrix
       Quadruple
   other-modules:
       Paths_RTC_Haskell
@@ -40,6 +41,8 @@ library
   build-depends:
       array
     , base >=4.7 && <5
+    , lens
+    , linear
   default-language: Haskell2010
 
 executable RTC-Chapter1-exe
@@ -87,6 +90,7 @@ test-suite RTC-Haskell-test
       Internal.Canvas.Tests
       Lib.Tests
       Math.Tests
+      Matrix.Tests
       Quadruple.Tests
       Paths_RTC_Haskell
   hs-source-dirs:

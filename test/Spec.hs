@@ -5,6 +5,7 @@ import qualified Quadruple.Tests (unitTests)
 import qualified Color.Tests (unitTests)
 import qualified Canvas.Tests (unitTests)
 import qualified Internal.Canvas.Tests (unitTests)
+import qualified Matrix.Tests (unitTests)
 
 main :: IO()
 main = defaultMain tests
@@ -16,4 +17,5 @@ tests = testGroup "All Tests" [ Lib.Tests.unitTests
                               , Color.Tests.unitTests
                               , Internal.Canvas.Tests.unitTests
                               , Canvas.Tests.unitTests
+                              , Matrix.Tests.unitTests
                               ]

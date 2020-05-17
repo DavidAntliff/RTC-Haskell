@@ -26,6 +26,8 @@ library:
   source-dirs: src
   dependencies:
     - array
+    - linear
+    - lens
 
 executables:
   RTC-Haskell-exe:

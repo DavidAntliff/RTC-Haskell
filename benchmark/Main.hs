@@ -32,12 +32,12 @@ linearMult m =
 --data Matrix44 = Matrix44 [Row4]
 
 matMult :: [[Double]] -> [[Double]] -> [[Double]]
-matMult a b = 
+matMult a b =
   let r0 = getRow a 0
       r1 = getRow a 1
       r2 = getRow a 2
       r3 = getRow a 3
-      c0 = getColumn b 0 
+      c0 = getColumn b 0
       c1 = getColumn b 1
       c2 = getColumn b 2
       c3 = getColumn b 3
@@ -56,14 +56,14 @@ getColumn m i = [ getRow m 0 !! i
                 , getRow m 2 !! i
                 , getRow m 3 !! i
                 ]
-                
+
 dotProduct :: [Double] -> [Double] -> Double
 dotProduct row col = sum $ zipWith (*) row col
 
 -- Matrix44 [(Row4 [1, 2, 3, 4]), (Row4 [1,2,3,4]), (Row4 [1,2,3,5]), (Row4 [1,2,3,6])]
 
 naiveMult :: Double -> [[Double]]
-naiveMult m = 
+naiveMult m =
   let m1 = [ [m + 1, m, m, m]
            , [m, m + 6, m, m]
            , [m, m, m + 11, m]
@@ -80,8 +80,8 @@ naiveMult m =
 main :: IO()
 main = defaultMain [ bgroup "hmatrix" [ bench "mult 1" $ nf hmatrixMult 1.0
                                       ]
-                   , bgroup "linear" [ bench "mult 1" $ nf linearMult 1.0  
+                   , bgroup "linear" [ bench "mult 1" $ nf linearMult 1.0
                                      ]
-                   , bgroup "naive" [ bench "mult 1" $ nf naiveMult 1.0  
+                   , bgroup "naive" [ bench "mult 1" $ nf naiveMult 1.0
                                      ]
                    ]
