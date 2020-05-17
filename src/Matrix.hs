@@ -1,13 +1,12 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Matrix ( matrix22
               , matrix33
               , matrix44
               , elementAt
               , almostEqual
-              , mul22
-              , mul33
-              , mul44
+              , (|*|)
               ) where
 
 import Control.Lens
@@ -76,15 +75,19 @@ instance AlmostEqual Matrix44 where
         bl = concatMap toList (toList b)
     in and $ zipWith Math.almostEqual al bl
 
-mul22 :: Matrix22 -> Matrix22 -> Matrix22
-mul22 (Matrix22 a) (Matrix22 b) = Matrix22 (a !*! b)
+-- https://wiki.haskell.org/Functional_dependencies
+class MatrixMultiplication a b c | a b -> c where
+  infixl 7 |*|  -- set same precedence and associativity as *
+  (|*|) :: a -> b -> c
 
-mul33 :: Matrix33 -> Matrix33 -> Matrix33
-mul33 (Matrix33 a) (Matrix33 b) = Matrix33 (a !*! b)
+instance MatrixMultiplication Matrix22 Matrix22 Matrix22 where
+  (|*|) (Matrix22 a) (Matrix22 b) = Matrix22 (a !*! b)
 
-mul44 :: Matrix44 -> Matrix44 -> Matrix44
-mul44 (Matrix44 a) (Matrix44 b) = Matrix44 (a !*! b)
+instance MatrixMultiplication Matrix33 Matrix33 Matrix33 where
+  (|*|) (Matrix33 a) (Matrix33 b) = Matrix33 (a !*! b)
 
+instance MatrixMultiplication Matrix44 Matrix44 Matrix44 where
+  (|*|) (Matrix44 a) (Matrix44 b) = Matrix44 (a !*! b)
 
 -- Internal
 getVectorElement2 :: Int -> V2 a -> a
