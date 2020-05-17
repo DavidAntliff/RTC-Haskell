@@ -5,6 +5,9 @@ module Matrix ( matrix22
               , matrix44
               , elementAt
               , almostEqual
+              , mul22
+              , mul33
+              , mul44
               ) where
 
 import Control.Lens
@@ -12,6 +15,7 @@ import Linear ( M22, M33, M44
               , V2 (V2), V3 (V3), V4 (V4)
               , R2, R3, R4
               , _x, _y, _z, _w)
+import Linear.Matrix ((!*!))
 import qualified Math (almostEqual)
 import Data.Foldable (toList)
 
@@ -55,22 +59,32 @@ class AlmostEqual a where
   almostEqual :: a -> a -> Bool
 
 instance AlmostEqual Matrix22 where
-  almostEqual (Matrix22 a) (Matrix22 b) =   
+  almostEqual (Matrix22 a) (Matrix22 b) =
     let al = concatMap toList (toList a)
         bl = concatMap toList (toList b)
     in and $ zipWith Math.almostEqual al bl
 
 instance AlmostEqual Matrix33 where
-  almostEqual (Matrix33 a) (Matrix33 b) =   
+  almostEqual (Matrix33 a) (Matrix33 b) =
     let al = concatMap toList (toList a)
         bl = concatMap toList (toList b)
     in and $ zipWith Math.almostEqual al bl
 
 instance AlmostEqual Matrix44 where
-  almostEqual (Matrix44 a) (Matrix44 b) =   
+  almostEqual (Matrix44 a) (Matrix44 b) =
     let al = concatMap toList (toList a)
         bl = concatMap toList (toList b)
     in and $ zipWith Math.almostEqual al bl
+
+mul22 :: Matrix22 -> Matrix22 -> Matrix22
+mul22 (Matrix22 a) (Matrix22 b) = Matrix22 (a !*! b)
+
+mul33 :: Matrix33 -> Matrix33 -> Matrix33
+mul33 (Matrix33 a) (Matrix33 b) = Matrix33 (a !*! b)
+
+mul44 :: Matrix44 -> Matrix44 -> Matrix44
+mul44 (Matrix44 a) (Matrix44 b) = Matrix44 (a !*! b)
+
 
 -- Internal
 getVectorElement2 :: Int -> V2 a -> a
