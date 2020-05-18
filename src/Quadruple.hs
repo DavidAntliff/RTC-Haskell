@@ -34,7 +34,7 @@ point x' y' z' = Quadruple x' y' z' 1.0
 vector :: Double -> Double -> Double -> Quadruple
 vector x' y' z' = Quadruple x' y' z' 0.0
 
--- overridding (+) is problematic because it belongs to the Num class. Providing a Num instance for
+-- overriding (+) is problematic because it belongs to the Num class. Providing a Num instance for
 -- Quadruple is possible but inconvenient. Better to use a new operator instead.
 -- https://stackoverflow.com/a/8308197/143397
 infixl 6 |+|  -- set same precedence and associativity as +

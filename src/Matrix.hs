@@ -8,9 +8,11 @@ module Matrix ( Matrix22
               , matrix33
               , matrix44
               , elementAt
+              , setElementAt
               , (|*|)
               , identity
               , transpose
+              , inverse
               ) where
 
 import Control.Lens
@@ -21,7 +23,8 @@ import Linear ( M22, M33, M44
 import qualified Linear.Matrix ( (!*!)
                                , (!*)
                                , identity
-                               , transpose)
+                               , transpose
+                               , inv44)
 import qualified Math (almostEqual, AlmostEqual)
 import Data.Foldable (toList)
 import Quadruple (Quadruple(..))
@@ -51,15 +54,19 @@ matrix44 ( (a00, a01, a02, a03)
 
 class MatrixAccess a where
   elementAt :: (Int, Int) -> a -> Double
-
+  setElementAt :: (Int, Int) -> Double -> a -> a
+   
 instance MatrixAccess Matrix22 where
   elementAt (row, col) (Matrix22 m) = getVectorElement2 col $ getVectorElement2 row m
+  setElementAt (row, col) val (Matrix22 m) = Matrix22(set (ind2 row . ind2 col) val m)
 
 instance MatrixAccess Matrix33 where
   elementAt (row, col) (Matrix33 m) = getVectorElement3 col $ getVectorElement3 row m
+  setElementAt (row, col) val (Matrix33 m) = Matrix33(set (ind3 row . ind3 col) val m)
 
 instance MatrixAccess Matrix44 where
   elementAt (row, col) (Matrix44 m) = getVectorElement4 col $ getVectorElement4 row m
+  setElementAt (row, col) val (Matrix44 m) = Matrix44(set (ind4 row . ind4 col) val m)
 
 instance Eq Matrix22 where
   (Matrix22 a) == (Matrix22 b) = a == b
@@ -130,6 +137,12 @@ instance Transposable Matrix33 where
 
 instance Transposable Matrix44 where
   transpose (Matrix44 m) = Matrix44 (Linear.Matrix.transpose m)
+
+class Invertible a where
+  inverse :: a -> a
+
+instance Invertible Matrix44 where
+  inverse (Matrix44 m) = Matrix44 (Linear.Matrix.inv44 m)
 
 -- Internal
 getVectorElement2 :: Int -> V2 a -> a
