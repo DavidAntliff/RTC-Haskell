@@ -102,8 +102,8 @@ unitTests = testGroup "Matrix Unit Tests"
       in assertBool [] $ almostEqual (a |*| b) c
   , testCase "A 4x4 matrix multiplied by a quadruple" $
       let a = matrix44 ((1,2,3,4), (2,4,4,2), (8,6,4,1), (0,0,0,1))
-          b = Quadruple 1.0 2.0 3.0 1.0
-      in assertBool [] $ almostEqual (a |*| b) (Quadruple 18.0 24.0 33.0 1.0)
+          b = quadruple (1.0, 2.0, 3.0, 1.0)
+      in assertBool [] $ almostEqual (a |*| b) (quadruple (18.0, 24.0, 33.0, 1.0))
   , testCase "Multiplying a 4x4 matrix by the identity matrix" $
       let a = matrix44 ((0,1,2,4), (1,2,4,8), (2,4,8,16), (4,8,16,32))
           i = identity :: Matrix44
@@ -117,7 +117,7 @@ unitTests = testGroup "Matrix Unit Tests"
           i = identity :: Matrix22
       in assertBool [] $ almostEqual (a |*| i) a
   , testCase "Multiplying the identity matrix by a tuple" $
-      let q = Quadruple 1 2 3 4
+      let q = quadruple (1, 2, 3, 4)
           i = identity :: Matrix44
       in assertBool [] $ almostEqual (i |*| q) q
   , testCase "Transposing a 4x4 matrix" $

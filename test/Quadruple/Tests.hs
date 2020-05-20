@@ -10,7 +10,7 @@ unitTests :: TestTree
 
 unitTests = testGroup "Math Unit Tests"
   [ testGroup "A tuple with w=1.0 is a point" $
-      let q = Quadruple 4.3 (-4.2) 3.1 1.0 in
+      let q = quadruple (4.3, -4.2, 3.1, 1.0) in
         [ testCase "x" $ assertEqual [] (x q) 4.3
         , testCase "y" $ assertEqual [] (y q) (-4.2)
         , testCase "z" $ assertEqual [] (z q) 3.1
@@ -19,7 +19,7 @@ unitTests = testGroup "Math Unit Tests"
         , testCase "is not a vector" $ assertBool [] $ not $ isVector q
         ]
   , testGroup "A tuple with w=0 is a vector" $
-      let q = Quadruple 4.3 (-4.2) 3.1 0.0 in
+      let q = quadruple (4.3, -4.2, 3.1, 0.0) in
         [ testCase "x" $ assertEqual [] (x q) 4.3
         , testCase "y" $ assertEqual [] (y q) (-4.2)
         , testCase "z" $ assertEqual [] (z q) 3.1
@@ -28,13 +28,13 @@ unitTests = testGroup "Math Unit Tests"
         , testCase "is not a vector" $ assertBool [] $ isVector q
         ]
   , testCase "point() creates tuples with w=1" $
-      assertEqual [] (point 4 (- 4) 3) (Quadruple 4 (- 4) 3 1)
+      assertEqual [] (point 4 (- 4) 3) (quadruple (4, -4, 3, 1))
   , testCase "vector() creates tuples with w=0" $
-      assertEqual [] (vector 4 (- 4) 3) (Quadruple 4 (- 4) 3 0)
+      assertEqual [] (vector 4 (- 4) 3) (quadruple (4, -4, 3, 0))
   , testCase "Adding two tuples" $
-      let a1 = Quadruple 3 (-2) 5 1
-          a2 = Quadruple (-2) 3 1 0
-      in assertEqual [] (a1 |+| a2) (Quadruple 1 1 6 1)
+      let a1 = quadruple (3, -2, 5, 1)
+          a2 = quadruple (-2, 3, 1, 0)
+      in assertEqual [] (a1 |+| a2) (quadruple (1, 1, 6, 1))
   , testCase "Subtracting two points" $
       let p1 = point 3 2 1
           p2 = point 5 6 7
@@ -52,20 +52,20 @@ unitTests = testGroup "Math Unit Tests"
           v = vector 1 (-2) 3
       in assertEqual [] (zero |-| v) (vector (-1) 2 (-3))
   , testCase "Negating a tuple" $
-      let a = Quadruple 1 (-2) 3 (-4)
-      in assertEqual [] (neg a) (Quadruple (-1) 2 (-3) 4)
+      let a = quadruple (1, -2, 3, -4)
+      in assertEqual [] (neg a) (quadruple (-1, 2, -3, 4))
   , testGroup "Multiplying a tuple" $
-      let a = Quadruple 1 (-2) 3 (-4)
-      in [ testCase "by a scalar" $ assertEqual [] (a |* 3.5) (Quadruple 3.5 (-7) 10.5 (-14))
-         , testCase "by a scalar prefix" $ assertEqual [] (3.5 *| a) (Quadruple 3.5 (-7) 10.5 (-14))
-         , testCase "by a fraction" $ assertEqual [] (a |* 0.5) (Quadruple 0.5 (-1) 1.5 (-2))
-         , testCase "by a fraction prefix" $ assertEqual [] (0.5 *| a) (Quadruple 0.5 (-1) 1.5 (-2))
+      let a = quadruple (1, -2, 3, -4)
+      in [ testCase "by a scalar" $ assertEqual [] (a |* 3.5) (quadruple (3.5, -7, 10.5, -14))
+         , testCase "by a scalar prefix" $ assertEqual [] (3.5 *| a) (quadruple (3.5, -7, 10.5, -14))
+         , testCase "by a fraction" $ assertEqual [] (a |* 0.5) (quadruple (0.5, -1, 1.5, -2))
+         , testCase "by a fraction prefix" $ assertEqual [] (0.5 *| a) (quadruple (0.5, -1, 1.5, -2))
          ]
   , testCase "Dividing a tuple by a scalar" $
-      let a = Quadruple 1 (-2) 3 (-4)
-      in assertEqual [] (a |/ 2) (Quadruple 0.5 (-1) 1.5 (-2))
+      let a = quadruple (1, -2, 3, -4)
+      in assertEqual [] (a |/ 2) (quadruple (0.5, -1, 1.5, -2))
   , testCase "convert tuple to list" $
-      assertEqual [] (toList $ Quadruple 1 2 3 4) [1, 2, 3, 4]
+      assertEqual [] (toList $ quadruple (1, 2, 3, 4)) [1, 2, 3, 4]
   , testCase "Computing the magnitude of vector(1, 0, 0)" $
       let v = vector 1 0 0
       in assertEqual [] (magnitude v) 1

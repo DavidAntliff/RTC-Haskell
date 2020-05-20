@@ -27,7 +27,7 @@ import qualified Linear.Matrix ( (!*!)
                                , inv44)
 import qualified Math (almostEqual, AlmostEqual)
 import Data.Foldable (toList)
-import Quadruple (Quadruple(..))
+import Quadruple (Quadruple, quadruple, _impl)
 
 type Row2 = (Double, Double)
 type Row3 = (Double, Double, Double)
@@ -110,9 +110,9 @@ instance MatrixMultiplication Matrix44 Matrix44 Matrix44 where
   (|*|) (Matrix44 a) (Matrix44 b) = Matrix44 (a Linear.Matrix.!*! b)
 
 instance MatrixMultiplication Matrix44 Quadruple Quadruple where
-  (|*|) (Matrix44 a) (Quadruple q0 q1 q2 a3) =
-    let (V4 x y z w) = a  Linear.Matrix.!* V4 q0 q1 q2 a3
-    in Quadruple x y z w
+  (|*|) (Matrix44 a) q0 =
+    let (V4 x y z w) = a Linear.Matrix.!* _impl q0
+    in quadruple (x, y, z, w)
 
 class SquareMatrix a where
   identity :: a
