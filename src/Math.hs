@@ -2,6 +2,8 @@
 module Math ( AlmostEqual
             , almostEqual
             , almostEqualTol
+            , radiansFromDegrees
+            , degreesFromRadians
             ) where
 
 import Data.Maybe (fromMaybe)
@@ -32,3 +34,8 @@ def = fromMaybe
 almostEqualDef :: (Ord a, Fractional a) => a -> a -> Maybe a -> Bool
 almostEqualDef x y (def epsilon -> tol) = tol > abs (x - y)
 
+radiansFromDegrees :: Floating a => a -> a
+radiansFromDegrees = (*) (pi / 180.0)
+
+degreesFromRadians :: Floating a => a -> a
+degreesFromRadians = (*) (180.0 / pi)
