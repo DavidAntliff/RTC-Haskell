@@ -79,6 +79,7 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - RTC-Haskell
+      - lens
       - tasty
       - tasty-hunit
       - tasty-hspec

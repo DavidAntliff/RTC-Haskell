@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: eab04d5743da12b03a5a88f92446c754b37854343ee0aaff99f4f77e4eee8cf3
+-- hash: 40ab0dc600878f26d2e8a1df27b6f937430b801f98297deb2c71e00788f5b9fc
 
 name:           RTC-Haskell
 version:        0.1.0.0
@@ -116,6 +116,7 @@ test-suite RTC-Haskell-test
   build-depends:
       RTC-Haskell
     , base >=4.7 && <5
+    , lens
     , tasty
     , tasty-hspec
     , tasty-hunit
