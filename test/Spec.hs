@@ -7,6 +7,7 @@ import qualified Canvas.Tests (unitTests)
 import qualified Internal.Canvas.Tests (unitTests)
 import qualified Matrix.Tests (unitTests)
 import qualified Transformations.Tests (unitTests)
+import qualified RaySphere.Tests (unitTests)
 
 main :: IO()
 main = defaultMain tests
@@ -20,4 +21,5 @@ tests = testGroup "All Tests" [ Lib.Tests.unitTests
                               , Canvas.Tests.unitTests
                               , Matrix.Tests.unitTests
                               , Transformations.Tests.unitTests
+                              , RaySphere.Tests.unitTests
                               ]
