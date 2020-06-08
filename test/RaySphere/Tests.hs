@@ -70,5 +70,31 @@ unitTests = testGroup "Ray-Sphere Unit Tests"
          , testCase "first" $ assertEqual [] s (intersectionObject $ xs ^?! element 0) 
          , testCase "second" $ assertEqual [] s (intersectionObject $ xs ^?! element 1) 
          ]
+  , testCase "The hit, when all intersections have positive t" $
+      let s = sphere
+          i1 = Intersection 1 s
+          i2 = Intersection 2 s
+          xs = intersections [i2, i1]
+      in assertEqual [] (hit xs) (Just i1)
+  , testCase "The hit, when some intersections have negative t" $
+      let s = sphere
+          i1 = Intersection (-1) s
+          i2 = Intersection 1 s
+          xs = intersections [i2, i1]
+      in assertEqual [] (hit xs) (Just i2)  
+  , testCase "The hit, when all intersections have negative t" $
+      let s = sphere
+          i1 = Intersection (-2) s
+          i2 = Intersection (-1) s
+          xs = intersections [i2, i1]
+      in assertEqual [] (hit xs) Nothing  
+  , testCase "The hit is always the lowest non-negative intersection" $
+      let s = sphere
+          i1 = Intersection 5 s
+          i2 = Intersection 7 s
+          i3 = Intersection (-3) s
+          i4 = Intersection 2 s
+          xs = intersections [i1, i2, i3, i4]
+      in assertEqual [] (hit xs) (Just i4)  
   ]
 

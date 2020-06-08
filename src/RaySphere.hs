@@ -9,9 +9,12 @@ module RaySphere ( Ray
                  , IntersectionList
                  , intersections
                  , intersectionListCount
+                 , hit
                  ) where
 
 import Control.Exception
+import Control.Lens
+import Data.List (sortOn, find)
 
 import Quadruple
 
@@ -53,8 +56,16 @@ intersect s@Sphere r
         discriminant = b * b - 4 * a * c
 intersect _ r = []
 
+sortByT :: IntersectionList -> IntersectionList
+sortByT = sortOn intersectionT
+
 intersections :: [Intersection] -> IntersectionList
 intersections = id
 
 intersectionListCount :: IntersectionList -> Int
 intersectionListCount = length
+
+-- return the Intersection with the lowest non-negative t value
+hit :: IntersectionList -> Maybe Intersection
+hit il = let sorted = sortByT il
+         in find (\x -> intersectionT x >= 0) sorted
