@@ -6,8 +6,11 @@ import Test.Tasty.HUnit
 import Control.Lens
 
 import RaySphere
+import qualified RaySphere (transform)
 import Quadruple
+import Transformations
 import Math (almostEqual)
+import Matrix
 
 unitTests :: TestTree
 
@@ -95,6 +98,43 @@ unitTests = testGroup "Ray-Sphere Unit Tests"
           i3 = Intersection (-3) s
           i4 = Intersection 2 s
           xs = intersections [i1, i2, i3, i4]
-      in assertEqual [] (hit xs) (Just i4)  
+      in assertEqual [] (hit xs) (Just i4)
+  , testGroup "Translating a ray" $
+      let r = ray (point 1 2 3) (vector 0 1 0)
+          m = translation 3 4 5
+          r2 = RaySphere.transform r m
+      in [ testCase "origin" $ assertEqual [] (origin r2) (point 4 6 8)
+         , testCase "direction" $ assertEqual [] (direction r2) (vector 0 1 0)
+         ]
+  , testGroup "Scaling a ray" $
+      let r = ray (point 1 2 3) (vector 0 1 0)
+          m = scaling 2 3 4
+          r2 = RaySphere.transform r m
+      in [ testCase "origin" $ assertEqual [] (origin r2) (point 2 6 12)
+         , testCase "direction" $ assertEqual [] (direction r2) (vector 0 3 0)
+         ]
+  , testCase "A sphere's default transformation" $
+      let s = sphere
+      in assertEqual [] (getTransform s) (identity :: Matrix44)
+  , testCase "Changing a sphere's transformation" $
+      let s = sphere
+          t = translation 2 3 4
+          s' = setTransform s t
+      in assertEqual [] (getTransform s') t
+  , testGroup "Intersecting a scaled sphere with a ray" $
+      let r = ray (point 0 0 (-5)) (vector 0 0 1)
+          s = sphere
+          s' = setTransform s $ scaling 2 2 2
+          xs = intersect s' r
+      in [ testCase "count" $ assertEqual [] 2 (intersectionListCount xs)
+         , testCase "xs[0].t" $ assertEqual [] 3 (intersectionT $ xs ^?! element 0)
+         , testCase "xs[0].t" $ assertEqual [] 7 (intersectionT $ xs ^?! element 1)
+         ]
+  , testCase "Intersecting a translated sphere with a ray" $
+      let r = ray (point 0 0 (-5)) (vector 0 0 1)
+          s = sphere
+          s' = setTransform s $ translation 5 0 0
+          xs = intersect s' r
+      in assertEqual [] 0 (intersectionListCount xs)
   ]
 

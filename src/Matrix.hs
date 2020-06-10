@@ -118,13 +118,13 @@ class SquareMatrix a where
   identity :: a
 
 instance SquareMatrix Matrix22 where
-  identity = Matrix22 ( Linear.Matrix.identity :: M22 Double)
+  identity = Matrix22 (Linear.Matrix.identity :: M22 Double)
 
 instance SquareMatrix Matrix33 where
-  identity = Matrix33 ( Linear.Matrix.identity :: M33 Double)
+  identity = Matrix33 (Linear.Matrix.identity :: M33 Double)
 
 instance SquareMatrix Matrix44 where
-  identity = Matrix44 ( Linear.Matrix.identity :: M44 Double)
+  identity = Matrix44 (Linear.Matrix.identity :: M44 Double)
 
 class Transposable a where
   transpose :: a -> a
